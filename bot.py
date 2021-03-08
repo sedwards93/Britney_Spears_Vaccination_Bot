@@ -10,7 +10,7 @@ from os import environ
 from lxml import html
 import requests
 from twitter import OAuth, Twitter
-import credentials
+# import credentials
 
 CONSUMER_KEY = environ['CONSUMER_KEY']
 CONSUMER_SECRET = environ['CONSUMER_SECRET']
