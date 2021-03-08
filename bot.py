@@ -6,13 +6,19 @@ import re
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import os
+from os import environ
 from lxml import html
 import requests
 from twitter import OAuth, Twitter
 import credentials
 
-auth = tweepy.OAuthHandler(credentials.CONSUMER_KEY, credentials.CONSUMER_SECRET) 
-auth.set_access_token(credentials.ACCESS_TOKEN, credentials.ACCESS_SECRET)
+CONSUMER_KEY = environ['CONSUMER_KEY']
+CONSUMER_SECRET = environ['CONSUMER_SECRET']
+ACCESS_KEY = environ['ACCESS_KEY']
+ACCESS_SECRET = environ['ACCESS_SECRET']
+
+auth = tweepy.OAuthHandler(CONSUMER_SECRET, CONSUMER_SECRET) 
+auth.set_access_token(ACCESS_SECRET, ACCESS_SECRET)
 api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
 
 INTERVAL = 60 * 60 * 6  # tweet every 6 hours
@@ -25,7 +31,12 @@ class BritneyBot:
         self.youtube = 'https://youtu.be/PZYSiWHW8V0'
 
     def scrape_corona(self):
-        bot = webdriver.Firefox()
+        op = webdriver.ChromeOptions()
+        op.binaray_location = os.environ.get("GOOGLE_CHROME_BIN")
+        op.add_argument("--headless")
+        op.add_argument("--no-sandbox")
+        op.add_argument("--disable-dev-sh-usage")
+        bot = webdriver.Chrome(executable_path= os.environ.get("CHROMEDRIVER_PATH"), chrome_options=op)
         bot.get(self.url)
         time.sleep(3)
         element = bot.find_elements_by_xpath('//*[@id="value-item-people_vaccinated-first_dose_total-cumpeoplevaccinatedfirstdosebypublishdate-0_modal"]')
