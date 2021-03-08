@@ -13,7 +13,10 @@ import credentials
 
 auth = tweepy.OAuthHandler(credentials.CONSUMER_KEY, credentials.CONSUMER_SECRET) 
 auth.set_access_token(credentials.ACCESS_TOKEN, credentials.ACCESS_SECRET)
-api = tweepy.API(auth)
+api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
+
+INTERVAL = 60 * 60 * 6  # tweet every 6 hours
+# INTERVAL = 15  # every 15 seconds, for testing
 
 class BritneyBot:
     def __init__(self):
@@ -42,8 +45,15 @@ class BritneyBot:
 
 
 britneybot = BritneyBot()
-britneybot.scrape_corona()
-britneybot.tweet()
+while True:
+    print("About to fetch vaccine information")
+    britneybot.scrape_corona()
+    print("About to tweet")
+    britneybot.tweet()
+    print("About")
+    time.sleep(INTERVAL)
+
+
 
 
     
