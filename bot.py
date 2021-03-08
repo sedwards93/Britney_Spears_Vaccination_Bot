@@ -61,7 +61,7 @@ while True:
     britneybot.scrape_corona()
     print("About to tweet")
     britneybot.tweet()
-    print("About")
+    print("About to sleep for set interval")
     time.sleep(INTERVAL)
 
 
