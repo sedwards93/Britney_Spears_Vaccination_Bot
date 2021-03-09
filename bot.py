@@ -67,8 +67,8 @@ class BritneyBot:
         nrTweets = 300
         for tweet in tweepy.Cursor(api.search, search).items(nrTweets):
             try:
-                print('Tweet Liked')
                 tweet.favorite()
+                print('Tweet Liked')
             except tweepy.TweepError as e:
                 print(e.reason)
             except StopIteration:
