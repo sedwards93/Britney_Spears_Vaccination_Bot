@@ -10,18 +10,26 @@ from os import environ
 from lxml import html
 import requests
 from twitter import OAuth, Twitter
-# import credentials
 
+
+For Heroku
 CONSUMER_KEY = environ['CONSUMER_KEY']
 CONSUMER_SECRET = environ['CONSUMER_SECRET']
 ACCESS_KEY = environ['ACCESS_KEY']
 ACCESS_SECRET = environ['ACCESS_SECRET']
 
+# For local
+# import credentials
+# CONSUMER_KEY = credentials.CONSUMER_KEY
+# CONSUMER_SECRET = credentials.CONSUMER_SECRET
+# ACCESS_KEY = credentials.ACCESS_KEY
+# ACCESS_SECRET = credentials.ACCESS_SECRET
+
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET) 
 auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
 api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
 
-INTERVAL = 60 * 60 * 6  # tweet every 6 hours
+INTERVAL = 60 * 60 * 12  # tweet every 12 hours
 # INTERVAL = 15  # every 15 seconds, for testing
 
 class BritneyBot:
@@ -47,13 +55,26 @@ class BritneyBot:
         bot.close()
         
     def sample(self):
-        videos = ['https://youtu.be/PZYSiWHW8V0','https://youtu.be/elueA2rofoo','https://youtu.be/u4FF6MpcsRw', 'https://youtu.be/LOZuxwVk7TU']
+        videos = ['https://youtu.be/PZYSiWHW8V0', 'https://youtu.be/clwLKJ294u4', 'https://youtu.be/elueA2rofoo','https://youtu.be/u4FF6MpcsRw', 'https://youtu.be/LOZuxwVk7TU', 'https://youtu.be/Mzybwwf2HoQ', 'https://youtu.be/AJWtLf4-WWs']
         self.youtube = random.choice(videos)
 
     def tweet(self):
          self.sample()
          api.update_status(f'{self.number} people in the UK have received their first COVID-19 vaccine dose...\n\nYet Britney still doesn\'t have her freedom?!\n\n#FREEBRITNEY\n\n{self.youtube} via @YouTube')
 
+    def search(self):
+        search = '#freebritney'
+        nrTweets = 300
+        for tweet in tweepy.Cursor(api.search, search).items(nrTweets):
+            try:
+                print('Tweet Liked')
+                tweet.favorite()
+            except tweepy.TweepError as e:
+                print(e.reason)
+            except StopIteration:
+                break
+                
+            
 
 britneybot = BritneyBot()
 while True:
@@ -61,6 +82,12 @@ while True:
     britneybot.scrape_corona()
     print("About to tweet")
     britneybot.tweet()
+    print("About to search and favourite")
+    britneybot.search()
+    print("About to sleep for set interval")
+    time.sleep(INTERVAL)
+    print("About to search and favourite")
+    britneybot.search()
     print("About to sleep for set interval")
     time.sleep(INTERVAL)
 
