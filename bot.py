@@ -12,7 +12,7 @@ import requests
 from twitter import OAuth, Twitter
 
 
-For Heroku
+# For Heroku
 CONSUMER_KEY = environ['CONSUMER_KEY']
 CONSUMER_SECRET = environ['CONSUMER_SECRET']
 ACCESS_KEY = environ['ACCESS_KEY']
