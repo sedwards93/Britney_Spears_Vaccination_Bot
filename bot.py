@@ -29,8 +29,8 @@ auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
 api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
 
-INTERVAL = 60 * 60 * 12  # tweet every 12 hours
-# INTERVAL = 15  # every 15 seconds, for testing
+# INTERVAL = 60 * 60 * 12  # tweet every 12 hours
+# # INTERVAL = 15  # every 15 seconds, for testing
 
 class BritneyBot:
     def __init__(self):
@@ -64,13 +64,15 @@ class BritneyBot:
 
     def search(self):
         search = '#freebritney'
-        nrTweets = 300
+        nrTweets = 720
         for tweet in tweepy.Cursor(api.search, search).items(nrTweets):
             try:
                 tweet.favorite()
                 print('Tweet Liked')
+                time.sleep(120)
             except tweepy.TweepError as e:
                 print(e.reason)
+                time.sleep(120)
             except StopIteration:
                 break
                 
@@ -84,12 +86,7 @@ while True:
     britneybot.tweet()
     print("About to search and favourite")
     britneybot.search()
-    print("About to sleep for set interval")
-    time.sleep(INTERVAL)
-    print("About to search and favourite")
-    britneybot.search()
-    print("About to sleep for set interval")
-    time.sleep(INTERVAL)
+    
 
 
 
